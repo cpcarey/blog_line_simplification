@@ -3,6 +3,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const nodeEnv = process.env.NODE_ENV || 'development';
 const isProd = nodeEnv === 'production';
+const express = require('express');
 
 const plugins = [
   new webpack.DefinePlugin({
@@ -32,7 +33,7 @@ var config = {
   },
   output: {
     path: path.resolve('./dist'),
-    filename: '[name].bundle.js'
+    filename: '[name].bundle.js',
   },
   module: {
     rules: [
@@ -40,7 +41,7 @@ var config = {
         enforce: 'pre',
         test: /\.tsx?$/,
         exclude: [/\/node_modules\//],
-        use: ['awesome-typescript-loader', 'source-map-loader']
+        use: 'ts-loader',
       },
       !isProd
         ? {
@@ -53,7 +54,7 @@ var config = {
           }
         : null,
       { test: /\.html$/, loader: 'html-loader' },
-      { test: /\.css$/, loaders: ['style-loader', 'css-loader'] }
+      { test: /\.css$/, loaders: ['style-loader', 'css-loader'] },
     ].filter(Boolean)
   },
   resolve: {
@@ -64,7 +65,11 @@ var config = {
     contentBase: path.join(__dirname, 'dist/'),
     compress: true,
     port: 3000,
-    hot: true
+    hot: true,
+    //setup (app) {
+      //app.use('/assets/',
+        //express.static(path.join(__dirname, 'dist', 'assets')));
+    //}
   }
 };
 
